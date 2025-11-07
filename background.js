@@ -47,9 +47,6 @@ async function fetchNiftyData() {
     }
 }
 
-// Set up the offscreen document when the extension starts
-chrome.runtime.onstartup.addListener(setupOffscreenDocument);
-
 // Run the fetch and parse logic
 fetchNiftyData();
 setInterval(fetchNiftyData, 2000);
