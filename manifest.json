@@ -6,28 +6,13 @@
   "background": {
     "service_worker": "background.js"
   },
-  "action": {},
+  "action": {
+    "default_popup": "popup.html"
+  },
   "permissions": [
     "activeTab",
     "scripting",
-    "storage",
-    "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "storage"
   ],
-  "host_permissions": ["https://*/*", "http://*/*"],
-  "content_scripts": [
-    {
-      "js": ["scripts/MailTracker.js"],
-      "matches": [
-        "https://mail.google.com/*"
-      ]
-    }
-  ],
-  "declarative_net_request" : {
-    "rule_resources" : [{
-      "id": "ruleset_1",
-      "enabled": true,
-      "path": "rules.json"
-    }]
-  }
+  "host_permissions": ["https://*/*", "http://*/*"]
 }

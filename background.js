@@ -1,24 +1,24 @@
 
-
-function genSecret(length){
-  var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
+async function fetchNiftyData() {
+    try {
+        const response = await fetch('https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050', {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
+            }
+        });
+        const data = await response.json();
+        const niftyData = {
+            price: data.data[0].lastPrice,
+            open: data.data[0].open,
+            high: data.data[0].dayHigh,
+            low: data.data[0].dayLow,
+            close: data.data[0].previousClose,
+        };
+        chrome.storage.local.set({ niftyData });
+    } catch (error) {
+        console.error('Error fetching Nifty 50 data:', error);
+    }
 }
 
-/* on install/update, set a secret on the local storage
- * it will be used to generate mid(mail identifier) */
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason == "install" || details.reason == "update"){
-    chrome.storage.local.set({
-      "gmail_utils":{
-        "gmail_utils_secret": "yes", // genSecret(32)
-        "mails": []
-      }
-    })
-  }
-})
+fetchNiftyData();
+setInterval(fetchNiftyData, 2000);
